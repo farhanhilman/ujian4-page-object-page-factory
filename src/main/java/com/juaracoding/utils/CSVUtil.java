@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVUtil {
+
     public static List<String[]> readCSV(String filePath) {
         List<String[]> data = new ArrayList<>();
         try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {

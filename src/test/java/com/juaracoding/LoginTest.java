@@ -1,29 +1,39 @@
 package com.juaracoding;
 
 import com.juaracoding.drivers.DriverSingleton;
+import com.juaracoding.pages.HomePage;
 import com.juaracoding.pages.LoginPage;
 import com.juaracoding.utils.CSVUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class LoginTest {
 
-    private WebDriver driver;
+    WebDriver driver;
 
-    private LoginPage loginPage;
+    LoginPage loginPage = new LoginPage();
 
     @BeforeMethod
-    public void setUp(){
-        DriverSingleton.getInstance("chrome");
-        driver = DriverSingleton.getDriver();
-        driver.get("https://www.saucedemo.com");
-        loginPage = new LoginPage();
+    public void setUp() {
+        System.setProperty("webdriver.chrome.driver", "D:\\My Tools\\chromedriver-win64\\chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().window().maximize();
+        driver.get("https://www.saucedemo.com/");
+//
+//        DriverSingleton.getInstance("chrome");
+//        driver = DriverSingleton.getDriver();
+//        driver.get("https://www.saucedemo.com");
+//        loginPage = new LoginPage();
+//        homePage = new HomePage();
     }
 
     @DataProvider(name = "loginData")
@@ -39,7 +49,14 @@ public class LoginTest {
 
     @Test(dataProvider = "loginData")
     public void testLogin(String username, String password) {
-        loginPage.login(username, password);
+        WebElement usernameField = driver.findElement(By.id("user-name"));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.id("login-button"));
+
+        usernameField.sendKeys(username);
+        passwordField.sendKeys(password);
+        loginButton.click();
+
         // Check if login was successful
         try {
             WebElement productsTitle = driver.findElement(By.className("title"));
@@ -56,6 +73,7 @@ public class LoginTest {
             driver.quit();
         }
     }
+
 }
 
 

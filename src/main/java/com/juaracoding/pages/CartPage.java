@@ -22,7 +22,15 @@ public class CartPage {
     @FindBy(xpath = "//button[@id='continue-shopping']")
     private WebElement backButton;
 
+    @FindBy(xpath = "//button[@id='checkout']")
+    private WebElement checkoutButton;
+
+
     //Assertion
+    public void clickCheckoutButton(){
+        checkoutButton.click();
+    }
+
     public String getItemName(){
         return itemName.getText();
     }

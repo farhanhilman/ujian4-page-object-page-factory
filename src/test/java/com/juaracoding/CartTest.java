@@ -4,11 +4,14 @@ import com.juaracoding.drivers.DriverSingleton;
 import com.juaracoding.pages.CartPage;
 import com.juaracoding.pages.HomePage;
 import com.juaracoding.pages.LoginPage;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.awt.*;
 
 public class CartTest {
 
@@ -20,10 +23,12 @@ public class CartTest {
 
     private CartPage cartPage;
 
+
     @BeforeClass
     public void setUp(){
         DriverSingleton.getInstance("chrome");
         driver = DriverSingleton.getDriver();
+        driver.manage().window().maximize();
         driver.get("https://www.saucedemo.com");
         loginPage = new LoginPage();
         homePage = new HomePage();
@@ -43,9 +48,10 @@ public class CartTest {
         Assert.assertEquals(homePage.getTxtRemove(), "Remove");
         Assert.assertEquals(homePage.getTxtCart(), "1");
         homePage.clickCartButton();
+        DriverSingleton.delay(7);
         Assert.assertEquals(cartPage.getItemName(), "Sauce Labs Backpack");
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.saucedemo.com/cart.html");
         cartPage.clickBackButton();
+        homePage.logout();
     }
-
 }

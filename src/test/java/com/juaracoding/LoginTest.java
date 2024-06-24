@@ -19,21 +19,18 @@ public class LoginTest {
 
     WebDriver driver;
 
-    LoginPage loginPage = new LoginPage();
+    LoginPage loginPage;
+
+    HomePage homePage;
 
     @BeforeMethod
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "D:\\My Tools\\chromedriver-win64\\chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        DriverSingleton.getInstance("chrome");
+        driver = DriverSingleton.getDriver();
         driver.manage().window().maximize();
-        driver.get("https://www.saucedemo.com/");
-//
-//        DriverSingleton.getInstance("chrome");
-//        driver = DriverSingleton.getDriver();
-//        driver.get("https://www.saucedemo.com");
-//        loginPage = new LoginPage();
-//        homePage = new HomePage();
+        driver.get("https://www.saucedemo.com");
+        loginPage = new LoginPage();
+        homePage = new HomePage();
     }
 
     @DataProvider(name = "loginData")
@@ -49,13 +46,7 @@ public class LoginTest {
 
     @Test(dataProvider = "loginData")
     public void testLogin(String username, String password) {
-        WebElement usernameField = driver.findElement(By.id("user-name"));
-        WebElement passwordField = driver.findElement(By.id("password"));
-        WebElement loginButton = driver.findElement(By.id("login-button"));
-
-        usernameField.sendKeys(username);
-        passwordField.sendKeys(password);
-        loginButton.click();
+        loginPage.login(username, password);
 
         // Check if login was successful
         try {
@@ -69,11 +60,8 @@ public class LoginTest {
 
     @AfterMethod
     public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        DriverSingleton.delay(3);
+        DriverSingleton.closeObjectInstance();
     }
 
 }
-
-
